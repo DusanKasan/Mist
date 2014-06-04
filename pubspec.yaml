@@ -1,0 +1,5 @@
+name: Mist
+description: A simple and modular web server
+dependencies:
+  mock: any
+  unittest: any
