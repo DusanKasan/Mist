@@ -38,6 +38,7 @@ class Mist extends Server {
     this.registerRequestHandler(new MistRequestHandler(this));
     this.registerExceptionHandler(NoResourcesMatchUriException, new NoResourcesMatchUriExceptionHandler());
     this.registerExceptionHandler(MultipleResourcesMatchUriException, new MultipleResourcesMatchUriExceptionHandler());
+    this.registerExceptionHandler(ResourceMethodNotImplementedException, new ResourceMethodNotImplementedExceptionHandler());
   }
 }
 
