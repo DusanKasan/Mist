@@ -1,5 +1,5 @@
 import 'dart:io';
-import '../lib/mist.dart';
+import 'package:Mist/Mist.dart';
 
 main() {
   Mist mist = new Mist('127.0.0.1', 8080);
