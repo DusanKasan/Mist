@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'package:Mist/Mist.dart';
+import 'package:mists/mists.dart';
 
 main() {  
-  Mist mist = new Mist('127.0.0.1', 8080);
+  Mist mist = new Mist('127.0.0.1', 8081);
   mist.registerRequestHandler(new LogUriRequestHandler());
   mist.registerResource(new TestResource());
   mist.deploy();

@@ -1,7 +1,7 @@
 library mist;
 
 import 'dart:io';
-import 'package:Mist/Mist.dart';
+import 'package:mists/mists.dart';
 import 'package:unittest/unittest.dart';
 import 'package:mock/mock.dart';
 

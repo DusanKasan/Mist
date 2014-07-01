@@ -81,5 +81,5 @@ List getMetadata(Mirror mirror, Type metadata_type) {
  * Checks for metadata of [metadata_type] on [mirror]
  */
 bool hasMetadata(Mirror mirror, Type metadata_type) {
- return getMetadata(mirror, metadata_type).isEmpty;
+ return !getMetadata(mirror, metadata_type).isEmpty;
 }

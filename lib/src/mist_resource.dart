@@ -17,9 +17,9 @@ abstract class MistResource extends Resource {
   
   int get weight {
     if (_weight == null) {
-      try {
+      if (hasMetadata(reflect(this).type, Annotations.weight)) {
         _weight = getMetadata(reflect(this).type, Annotations.weight).first.value;
-      } on MetadataNotFoundException catch (exception) {
+      } else {
         _weight = 0;
       }
     }
