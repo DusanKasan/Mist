@@ -76,9 +76,7 @@ abstract class Server {
       
       this._exception_handlers.forEach((exception_type, handler) {
         //this should be possible with is, with mirrors it will be slow
-        if (exception_mirror.isSubtypeOf(reflectType(exception_type))) {
-          print ('matched');
-          
+        if (exception_mirror.isSubtypeOf(reflectType(exception_type))) {          
           found_handler = true;
           handler.handle(request, exception);
         }

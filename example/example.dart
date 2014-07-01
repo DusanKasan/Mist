@@ -1,24 +1,21 @@
 import 'dart:io';
 import 'package:Mist/Mist.dart';
 
-main() {
+main() {  
   Mist mist = new Mist('127.0.0.1', 8080);
   mist.registerRequestHandler(new LogUriRequestHandler());
   mist.registerResource(new TestResource());
   mist.deploy();
 }
 
-class TestResource extends MistResource 
-{  
-  /**
-   * Bind to uri /:id.
-   */
-  TestResource() : super('/:id');
-  
+@uri("/:id")
+class TestResource extends MistResource
+{
   /**
    * Gets id variable from URI and returns it to client.
    */
-  get(HttpRequest request) {
+  @method("get")
+  getRequestId(HttpRequest request) {
     var parameters = this.getUriParametersMap(request.uri);
     request.response.write(parameters['id']);
   }

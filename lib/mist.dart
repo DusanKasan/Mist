@@ -3,14 +3,17 @@ library mist;
 import 'dart:io';
 import 'dart:mirrors';
 import 'src/mist_abstraction.dart';
+import 'src/annotations.dart' as Annotations;
 
 export 'src/mist_abstraction.dart' hide Server, Resource;
+export 'src/annotations.dart';
 
-part 'mist_resource_mapper.dart';
-part 'mist_resource.dart';
-part 'mist_request_handler.dart';
-part 'mist_exceptions.dart';
-part 'mist_exception_handlers.dart';
+part 'src/mist_resource_mapper.dart';
+part 'src/mist_resource.dart';
+part 'src/mist_request_handler.dart';
+part 'src/mist_exceptions.dart';
+part 'src/mist_exception_handlers.dart';
+part 'src/utils.dart';
 
 /**
  * Mist

@@ -7,11 +7,11 @@ import 'package:mock/mock.dart';
 
 void main () {
   test('MistResource instantiation', () {
-    expect(new TestResource('/test') is MistResource, isTrue);
+    expect(new TestResource() is MistResource, isTrue);
     });
   
   test('MistResource parsing URI arguments', () {
-    var resource = new TestResource('/:var1/abc/:var2');
+    var resource = new TestResource();
     var uri = new MockUri.generate('/first/abc/second');
     
     Map<String, String> param_map = resource.getUriParametersMap(uri);
@@ -20,7 +20,7 @@ void main () {
     });
   
   test('MistResource throws a ResourceMethodNotImplementedException', () {
-    var resource = new TestResource('/test'); 
+    var resource = new TestResource();
     expect(() => resource.put(), throwsA(new isInstanceOf<ResourceMethodNotImplementedException>()));      
     });
   
@@ -100,6 +100,7 @@ void main () {
     var request = new MockRequest.generate('/test', 'post');
     var handler = new MistRequestHandler(mist);
     
+    resource.when(callsTo('get methods')).alwaysReturn({"post": const Symbol("post")});
     mist.when(callsTo('get resource_mapper')).alwaysReturn(mapper);
     mapper.when(callsTo('getResourceByRequest')).alwaysReturn(resource);
     
@@ -111,9 +112,7 @@ void main () {
     expect(new Mist('127.0.0.1', 1478) is Mist, isTrue);
     expect(new Mist('127.0.0.1', 1478, use_default_behavior: false) is Mist, isTrue);
     });
-  
-  //Todo: Tests for exceptionHandlers (each one)
-  
+    
   test('Mist registering request handlers', () {
     var mist = new Mist('127.0.0.1', 1478, use_default_behavior: false);
     var request_handler1 = new MockRequestHandler();
@@ -156,7 +155,8 @@ void main () {
     var resource = new MockResource.generate('/test', ['get']);
     var exception_handler = new MockExceptionHandler();
     
-    resource.when(callsTo('post')).alwaysThrow(new MockException());
+    resource.when(callsTo('get methods')).alwaysReturn({"post": const Symbol("post_method")});
+    resource.when(callsTo('post_method')).alwaysThrow(new MockException());
     
     mist.registerResource(resource);
     mist.registerExceptionHandler(MockException, exception_handler);
@@ -170,6 +170,7 @@ void main () {
     var request = new MockRequest.generate('/test', 'post');
     var resource = new MockResource.generate('/test', ['get']);
     
+    resource.when(callsTo('get methods')).alwaysReturn({"post": const Symbol("post")});
     resource.when(callsTo('post')).alwaysThrow(new MockException());
     
     mist.registerResource(resource);
@@ -227,9 +228,10 @@ class MockUri extends Mock implements Uri {
 /**
  * Actual implementation to test
  */
+@uri("/:var1/abc/:var2")
 class TestResource extends MistResource {
-  TestResource(String uri, {int weight:0}) : super(uri, weight:weight);
-    
+
+  @method("get")
   get(HttpRequest request) {    
     request.response.write('implementation');
   }
