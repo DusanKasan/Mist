@@ -1,4 +1,7 @@
 #Mist - Web server micro framework for Dart
+
+[![Build Status](https://drone.io/github.com/DusanKasan/Mist/status.png)](https://drone.io/github.com/DusanKasan/Mist/latest)
+
 Mist is a micro framework for creating server-side applications in Dart oriented on REST services. It is modular and extensible. Its core provides only the basic functionality with the tools to implement specific functionality with ease.
 
 Mist is a specific implementation of abstract concepts located in /lib/src/mist_abstraction.dart. If you can not achieve desired behavior with Mist, you can create your specific implementation for this abstraction.
