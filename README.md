@@ -85,7 +85,7 @@ Each resource is represented as a child of `MistResource` abstract class. They a
 
 URIs can be:
 - static `/test/uri` 
-- dynamic `/test/:var` where variables are marked by colon (:)
+- dynamic `/test/:var` where variables are marked by colon (:) and followed by variable name
 
 If we have these two examples registered into Mist, all requests with URIs `/test/{{random_string}}` will be processed by the dynamic one, except for the `/test/uri` which will be pointed to the static one if they both have the same priority, thanks to the automatic weighing of the resources - during registration, the priority of the dynamic URI will get decreased by an amount equal to the number of variables in it.
 
@@ -95,6 +95,6 @@ So, if we register:
 
 the weight of the second resource will get decreased by 1 to -1. So when the request with uri `/test/uri` comes, the static resource will have higher weight and will be prioritized. This could be a problem when registering 2 resources with overlaping dynamic URIs, for example `/test/:uri` and `/:test/uri`. In this case you have to manually assign weight to the resources to ensure correct prioritization.
 
-The resources should have one public method for each HTTP method (i.e. get, put, post ...) you want them to process. These methods should take 1 argument being `HttpRequest` and must be annotated with `@method(String method_name)`.These will be called by `MistRequestHandler` which is the core request processor in Mist respectively by matching the currently incoming HTTP methods to matched resource public methods.
+The resources should have one public method for each HTTP method (i.e. get, put, post ...) you want them to process. These methods should take 1 argument being `HttpRequest` and must be annotated with `@method(String method_name)`.These will be called by `MistRequestHandler`, which is the core request processor in Mist, respectively by matching the currently incoming HTTP methods to matched resource public methods. No that mist also supports asynchronous code execution. All you have to do, is return a Future at the end of asynchronous method. Mist will recognize the future and will change its behavior accordingly (catching future exceptions, etc...)
 
 `MistResource` also has a method `Map<String,String> getUriParametersMap(HttpRequest request)` to fetch variables from currently processed request, by comparing it to its `uri` property.

@@ -1,10 +1,8 @@
 name: mists
-version: 0.02.0
+version: 0.03.1
 author: Dušan Kasan <dusan@kasan.sk>
 description: A simple and modular web server
 homepage: https://github.com/DusanKasan/Mist
-environment:
-  sdk: 1.4.2
 documentation: https://github.com/DusanKasan/Mist
 dependencies:
   mock: '>=0.11.0+1 <0.12.0'

@@ -2,6 +2,7 @@ library abstraction;
 
 import 'dart:io';
 import 'dart:mirrors';
+import 'dart:async';
 
 /**
  * Main class of server, on it Resources and Request/Exception Handlers are registered.
@@ -65,30 +66,48 @@ abstract class Server {
    * 
    * Todo: Figure a way how to make this private and testable.
    */
-  void processRequest(HttpRequest request) {
+  processRequest(HttpRequest request) {    
+    var handlers = [];
     try {
       this._request_handlers.forEach((handler) {
-        handler.handle(request);
-      });
-    } catch (exception) {
-      var exception_mirror = reflectClass(exception.runtimeType);
-      var found_handler = false;
-      
-      this._exception_handlers.forEach((exception_type, handler) {
-        //this should be possible with is, with mirrors it will be slow
-        if (exception_mirror.isSubtypeOf(reflectType(exception_type))) {          
-          found_handler = true;
-          handler.handle(request, exception);
+        var handled = handler.handle(request);
+        
+        if (handled is Future) {
+          handlers.add(handled);
+        } else {
+          handlers.add(new Future(() => handled));
         }
       });
-            
-      //if no handler for this type is found, propagate exception
-      if (found_handler == false) {
-        throw exception;
-      }
+    } catch (exception) {
+      processException(request, exception);
     }
     
-    request.response.close();
+    Future.wait(handlers)
+      ..catchError((exception) {
+          this.processException(request, exception);
+          request.response.close();
+        })
+      ..then((object) {
+          request.response.close();
+        });
+  }
+  
+  processException(request, exception) {
+    var exception_mirror = reflectClass(exception.runtimeType);
+    var found_handler = false;
+    
+    this._exception_handlers.forEach((exception_type, handler) {
+      //this should be possible with is, with mirrors it will be slow
+      if (exception_mirror.isSubtypeOf(reflectType(exception_type))) {          
+        found_handler = true;
+        handler.handle(request, exception);
+      }
+    });
+          
+    //if no handler for this type is found, propagate exception
+    if (found_handler == false) {
+      throw exception;
+    }
   }
 }
 
@@ -111,7 +130,7 @@ abstract class Resource {}
  * They are registered in server using the method [Server.registerRequestHandler].
  */
 abstract class RequestHandler {
-  void handle(HttpRequest request);
+  handle(HttpRequest request);
 }
 
 /**
@@ -119,7 +138,7 @@ abstract class RequestHandler {
  * They are registered in server using the method [Server.registerExceptionHandler].
  */
 abstract class ExceptionHandler {
-  void handle(HttpRequest request, Exception exception);
+  handle(HttpRequest request, Exception exception);
 }
 
 /**
