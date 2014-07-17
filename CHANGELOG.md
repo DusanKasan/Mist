@@ -8,3 +8,6 @@ Resource and methods identification moved into @uri, @weight and @method annotat
 
 #### Mist v0.03 - 10.07.2014
 Resource methods can now be executed asynchronously, but have to return the last future of the execution chain to correctly close the response. Documentation soon to follow.
+
+#### Mist v0.04 - 17.07.2014
+Changes to asynchronous code execution and exception handling, documentation changed to reflect this.
